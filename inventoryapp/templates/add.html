@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+<!-- Give content to the block title -->
+{% block title %}Inventory{% endblock %}
+
+{% block content %}
+<!-- New product form -->
+<form action="/addproduct" autocomplete="on" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="Id" class="form-label">Product id</label>
+        <input type="text" class="form-control" id="Id" name="id">
+    </div>
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Product name</label>
+        <input type="text" class="form-control" id="Name" name="name">
+    </div>
+
+    <div class="mb-3">
+        <label for="Price" class="form-label">Price</label>
+        <input type="float" class="form-control" id="Price" name="price">
+    </div>
+
+    <div class="mb-3">
+        <label for="Stock" class="form-label">Stock</label>
+        <input type="integer" class="form-control" id="Stock" name="stock">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+{% endblock %}
