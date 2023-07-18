@@ -14,26 +14,19 @@ def home():
 def addproduct():
     if request.method == 'POST':
         id = request.form['id']
-        product_name = request.form['product_name']
+        name = request.form['name']
         price = request.form['price']
         stock = request.form['stock']
 
-        query = "UPDATE B_complete SET comment = %s, status = 'Used' WHERE device_name = %s"
-
-        #Create sql connection
-        #connection = engine.connect()
-
-        #connection.execute(query, (new_comment, device))
-
-        #Query database to check user does not exist previously
-        product = Product.query.filter_by(product_name = product_name).first() #returns first result
+        #Query database to check product does not already exist
+        product = Product.query.filter_by(name = name).first() #returns first result
         if product:
             print('Prduct already exists in inventory')
         else:
             #Add new product
             new_product = Product(
                 id = id,
-                product_name = product_name,
+                name = name,
                 price = price,
                 stock = stock
             )
@@ -43,5 +36,5 @@ def addproduct():
 
         print('product added')
 
-    return render_template('addproduct.html')
+    return render_template('add.html')
 
