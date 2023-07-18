@@ -24,6 +24,11 @@ def create_app():
     #Initialize the app with the extension. Basically tells the databse which app will be accesing it 
     db.init_app(app)
 
+    from .views import views
+    app.register_blueprint(views, url_prefix = '/')
+
+    from .models import Product
+
     return app
 
 
