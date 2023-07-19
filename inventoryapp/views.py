@@ -1,7 +1,7 @@
-from crypt import methods
-from flask import Blueprint, render_template, request, flash
+from flask import Blueprint, render_template, request
 from .models import Product
 from . import db
+import pandas as pd
 
 #Set up blueprint for Flask application
 views = Blueprint('views', __name__)
@@ -9,6 +9,18 @@ views = Blueprint('views', __name__)
 @views.route('/')
 def home():
     return render_template('home.html')
+
+
+@views.route('/availableproducts')
+def availableproducts():
+    #Create df from DB table 
+    products_df = pd.read_sql_table('product', con = db.engine)
+   
+    #Converts dataframe to html table    
+    products_html = products_df.to_html(classes = "[table-responsive, table table-dark table-striped]", justify = 'left', index = False)
+
+    return render_template('available.html', table = products_html)
+
 
 @views.route('/addproduct', methods = ['GET', 'POST'])
 def addproduct():
