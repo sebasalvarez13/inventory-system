@@ -13,7 +13,6 @@ def home():
 @views.route('/addproduct', methods = ['GET', 'POST'])
 def addproduct():
     if request.method == 'POST':
-        id = request.form['id']
         name = request.form['name']
         price = request.form['price']
         stock = request.form['stock']
@@ -25,7 +24,6 @@ def addproduct():
         else:
             #Add new product
             new_product = Product(
-                id = id,
                 name = name,
                 price = price,
                 stock = stock
