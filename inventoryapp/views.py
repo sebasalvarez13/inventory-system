@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-from .models import Product
+from .models import Products
 from . import db
 import pandas as pd
 
@@ -14,7 +14,7 @@ def home():
 @views.route('/availableproducts')
 def availableproducts():
     #Create df from DB table 
-    products_df = pd.read_sql_table('product', con = db.engine)
+    products_df = pd.read_sql_table('products', con = db.engine)
    
     #Converts dataframe to html table    
     products_html = products_df.to_html(classes = "[table-responsive, table table-dark table-striped]", justify = 'left', index = False)
@@ -30,12 +30,12 @@ def addproduct():
         stock = request.form['stock']
 
         #Query database to check product does not already exist
-        product = Product.query.filter_by(name = name).first() #returns first result
+        product = Products.query.filter_by(name = name).first() #returns first result
         if product:
             print('Prduct already exists in inventory')
         else:
             #Add new product
-            new_product = Product(
+            new_product = Products(
                 name = name,
                 price = price,
                 stock = stock
