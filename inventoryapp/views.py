@@ -13,8 +13,13 @@ def home():
 
 @views.route('/availableproducts')
 def availableproducts():
-    #Create df from DB table 
-    products_df = pd.read_sql_table('products', con = db.engine)
+    #Open sql script to obtain Products join Vendors info
+    path = "/mnt/c/users/sa55851/desktop/projects/scripts/inventory-system/inventoryapp/sql/products.sql"
+    with open(path, 'r') as sql_script:
+        query = sql_script.read()
+    
+    #Convert sql script result to a dataframe    
+    products_df = pd.read_sql_query(query, con = db.engine)
    
     #Converts dataframe to html table    
     products_html = products_df.to_html(classes = "[table-responsive, table table-dark table-striped]", justify = 'left', index = False)
