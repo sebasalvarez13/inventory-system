@@ -7,3 +7,8 @@ class Products(db.Model):
     name = db.Column(db.String(100))
     price = db.Column(db.Float)
     stock = db.Column(db.Integer)
+
+class Vendors(db.model):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(100))
+    country = db.Column(db.String(100))
