@@ -36,7 +36,6 @@ def addproduct():
     
     #Convert individual column to a list
     vendors_list = vendors_df.values.tolist()
-    print(vendors_list)
 
     if request.method == 'POST':
         name = request.form['name']
