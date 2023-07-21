@@ -29,10 +29,21 @@ def availableproducts():
 
 @views.route('/addproduct', methods = ['GET', 'POST'])
 def addproduct():
+    #Select the name of vendors from Vendor table
+    query = """SELECT id, name FROM vendors"""
+    #Convert query result to dataframe. 
+    vendors_df = pd.read_sql_query(query, con = db.engine)
+    
+    #Convert individual column to a list
+    vendors_list = vendors_df.values.tolist()
+    print(vendors_list)
+
     if request.method == 'POST':
         name = request.form['name']
         price = request.form['price']
         stock = request.form['stock']
+        vendor_id = request.form['vendor']
+ 
 
         #Query database to check product does not already exist
         product = Products.query.filter_by(name = name).first() #returns first result
@@ -43,13 +54,14 @@ def addproduct():
             new_product = Products(
                 name = name,
                 price = price,
-                stock = stock
+                stock = stock,
+                vendor_id = vendor_id
             )
 
             db.session.add(new_product)
             db.session.commit()
 
-        print('product added')
-
-    return render_template('add.html')
+            print('product added')
+    
+    return render_template('add.html', value = vendors_list)
 
