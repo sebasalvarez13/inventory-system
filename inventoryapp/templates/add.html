@@ -20,6 +20,16 @@
         <input type="integer" class="form-control" id="Stock" name="stock">
     </div>
 
+    <label for="Vendor" class="form-label">Vendor</label>
+    <div class="input-group mb-3">
+        <select class="form-select" id="vendor" name="vendor">
+          <option selected>Choose...</option>
+          <option value = {{ value[0][0] }} >{{ value[0][1] }}</option>
+          <option value= {{ value[1][0] }}>{{ value[1][1] }}</option>
+          <option value="3">Three</option>
+        </select>
+      </div>
+
     <button type="submit" class="btn btn-primary">Add</button>
 </form>
 
