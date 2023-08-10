@@ -99,23 +99,17 @@ def addorder():
             print('null result')
             flash('Vendor does not supply product selected', category = 'error')
         else:
-            flash('Vendor supplies product selected')
-
-        """
-        #If result is count:0, display flash message "Vendor does not supply product selected"
-        if results_as_dict['count'] is 1:
-            flash('Vendor does not supply product selected', category = 'error')
-        else:
+            flash('Order succesfully placed!')
             new_order = Orders(
                     product_name = product_name,
                     quantity = quantity,
                     vendor_id = vendor_id,
                     date = datetime.now()
-                )
+            )
 
             #db.session.add(new_order)
             #db.session.commit()
   
-        """ 
+        
 
     return render_template('orders.html', value = vendors_list)
