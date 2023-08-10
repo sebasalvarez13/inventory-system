@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, flash
 from .models import Products, Orders
 from . import db
 import pandas as pd
@@ -77,6 +77,7 @@ def addorder():
     #Convert individual column to a list
     vendors_list = vendors_df.values.tolist()
 
+
     if request.method == 'POST':
         product_name = request.form['product_name']
         quantity = request.form['quantity']
@@ -87,21 +88,34 @@ def addorder():
         with open(path, 'r') as sql_script:
             query = sql_script.read()
         
+        #Verify product and vendor match. If so, return count: 1
         result = db.session.execute(text(query), {'val1':product_name, 'val2' :vendor_id})
-
+        #Returns query result as a dictionary enclosed in a LIST. 
         results_as_dict = result.mappings().all()
 
-    
-        new_order = Orders(
-                product_name = product_name,
-                quantity = quantity,
-                vendor_id = vendor_id,
-                date = datetime.now()
-            )
+        print(results_as_dict)
+        #If the return list is empty, it means that the vendor selected does not provide the requested product
+        if not results_as_dict:
+            print('null result')
+            flash('Vendor does not supply product selected', category = 'error')
+        else:
+            flash('Vendor supplies product selected')
 
-        db.session.add(new_order)
-        db.session.commit()
+        """
+        #If result is count:0, display flash message "Vendor does not supply product selected"
+        if results_as_dict['count'] is 1:
+            flash('Vendor does not supply product selected', category = 'error')
+        else:
+            new_order = Orders(
+                    product_name = product_name,
+                    quantity = quantity,
+                    vendor_id = vendor_id,
+                    date = datetime.now()
+                )
+
+            #db.session.add(new_order)
+            #db.session.commit()
   
-            
+        """ 
 
     return render_template('orders.html', value = vendors_list)
