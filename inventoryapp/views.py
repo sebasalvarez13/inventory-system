@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, request
-from .models import Products
+from .models import Products, Orders
 from . import db
 import pandas as pd
+from datetime import datetime
+from sqlalchemy import text
 
 #Set up blueprint for Flask application
 views = Blueprint('views', __name__)
@@ -64,3 +66,42 @@ def addproduct():
     
     return render_template('add.html', value = vendors_list)
 
+
+@views.route('/orders', methods = ['GET', 'POST'])
+def addorder():
+    #Select the name of vendors from Vendor table
+    query = """SELECT id, name FROM vendors"""
+    #Convert query result to dataframe. 
+    vendors_df = pd.read_sql_query(query, con = db.engine)
+    
+    #Convert individual column to a list
+    vendors_list = vendors_df.values.tolist()
+
+    if request.method == 'POST':
+        product_name = request.form['product_name']
+        quantity = request.form['quantity']
+        vendor_id = request.form['vendor']
+        
+        #Open sql script to obtain Products join Vendors info
+        path = "/mnt/c/users/sa55851/desktop/projects/scripts/inventory-system/inventoryapp/sql/product_matches_vendor.sql"
+        with open(path, 'r') as sql_script:
+            query = sql_script.read()
+        
+        result = db.session.execute(text(query), {'val1':product_name, 'val2' :vendor_id})
+
+        results_as_dict = result.mappings().all()
+
+    
+        new_order = Orders(
+                product_name = product_name,
+                quantity = quantity,
+                vendor_id = vendor_id,
+                date = datetime.now()
+            )
+
+        db.session.add(new_order)
+        db.session.commit()
+  
+            
+
+    return render_template('orders.html', value = vendors_list)
