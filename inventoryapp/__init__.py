@@ -11,6 +11,7 @@ DB_NAME = 'inventory'
 def create_app():
     #Create Flask app
     app = Flask(__name__)
+    app.secret_key = 'asdfghjkl'
 
     #Define database information
     user = 'sebasalvarez13'
@@ -27,7 +28,6 @@ def create_app():
     from .views import views
     app.register_blueprint(views, url_prefix = '/')
 
-    from .models import Product
 
     return app
 
