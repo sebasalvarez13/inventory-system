@@ -1,6 +1,7 @@
 '''Define database models'''
 
 from datetime import date
+from telnetlib import STATUS
 from . import db
 
 class Products(db.Model):
@@ -21,4 +22,5 @@ class Orders(db.Model):
     quantity = db.Column(db.Integer)
     vendor_id = db.Column(db.Integer, db.ForeignKey('vendors.id')) 
     date = db.Column(db.DateTime)
-    
+    status = db.Column(db.String(100))
+    order_number = db.Column(db.String(100), primary_key = True)
