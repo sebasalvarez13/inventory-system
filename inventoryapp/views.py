@@ -4,6 +4,8 @@ from . import db
 import pandas as pd
 from datetime import datetime
 from sqlalchemy import text
+import random
+import string
 
 #Set up blueprint for Flask application
 views = Blueprint('views', __name__)
@@ -96,20 +98,37 @@ def addorder():
         print(results_as_dict)
         #If the return list is empty, it means that the vendor selected does not provide the requested product
         if not results_as_dict:
-            print('null result')
             flash('Vendor does not supply product selected', category = 'error')
         else:
-            flash('Order succesfully placed!')
+            flash('Order placed successfully!')
+
             new_order = Orders(
                     product_name = product_name,
                     quantity = quantity,
                     vendor_id = vendor_id,
-                    date = datetime.now()
+                    date = datetime.now(),
+                    status = 'Ordered',
+                    order_number  = generate_order_number()
+
             )
 
-            #db.session.add(new_order)
-            #db.session.commit()
-  
-        
+            db.session.add(new_order)
+            db.session.commit()
 
     return render_template('orders.html', value = vendors_list)
+
+
+def generate_order_number():
+    #initializing size of string
+    string_length = 10
+
+    #using random.choices()
+    #generating random strings
+    #returns a list of characters. Use join to form a word
+    order_number = ''.join(random.choices(string.ascii_uppercase + string.digits, k = string_length))
+
+    return(order_number)
+
+
+
+    
