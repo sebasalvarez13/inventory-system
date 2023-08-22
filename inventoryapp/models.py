@@ -24,3 +24,10 @@ class Orders(db.Model):
     date = db.Column(db.DateTime)
     status = db.Column(db.String(100))
     order_number = db.Column(db.String(100), primary_key = True)
+
+class Deliveries(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    vendor_id = db.Column(db.Integer) 
+    date = db.Column(db.DateTime)
+    employee_id = db.Column(db.Integer)
+    order_number = db.Column(db.String(100), db.ForeignKey('orders.order_number'))
