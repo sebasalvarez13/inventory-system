@@ -1,11 +1,12 @@
-from flask import Blueprint, render_template, request, flash
-from .models import Products, Orders
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from .models import Products, Orders, Deliveries
 from . import db
 import pandas as pd
 from datetime import datetime
 from sqlalchemy import text
 import random
 import string
+from .deliveries import scan_package
 
 #Set up blueprint for Flask application
 views = Blueprint('views', __name__)
@@ -79,7 +80,6 @@ def addorder():
     #Convert individual column to a list
     vendors_list = vendors_df.values.tolist()
 
-
     if request.method == 'POST':
         product_name = request.form['product_name']
         quantity = request.form['quantity']
@@ -116,7 +116,6 @@ def addorder():
             db.session.commit()
 
     
-    
     #Select query to display Orders table
     query = """SELECT * FROM orders"""
     #Convert sql script result to a dataframe    
@@ -138,6 +137,35 @@ def generate_order_number():
 
     return(order_number)
 
+
+@views.route('/deliveries', methods = ['GET', 'POST'])
+def delivery():
+    if request.method == 'POST':
+        print('scanning package')
+        #scan_package()
+        scan_order_number = 'FV31DRBXW7'
+        #Scan new package. extract info from barcode data
+        new_delivery = Deliveries(
+            vendor_id = 1,
+            date = datetime.now(),
+            employee_id = 13,
+            order_number = scan_order_number
+        )
+
+        db.session.add(new_delivery)
+        db.session.commit()
+
+        path = "/mnt/c/users/sa55851/desktop/projects/scripts/inventory-system/inventoryapp/sql/update_order_status.sql"
+        with open(path, 'r') as sql_script:
+            query = sql_script.read()
+        
+        db.session.execute(text(query), {'val1': scan_order_number})
+        db.session.commit()
+        
+        print('order updated')
+
+    
+    return redirect(url_for('views.addorder'))
 
 
     
