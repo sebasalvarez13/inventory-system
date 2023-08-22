@@ -37,8 +37,11 @@
             Container Right. Variable width content
             <!-- Display table Orders -->
             {{ table|safe }}
-            
+            <form action="/deliveries" method="POST">
+                <button type="submit" class="btn btn-primary">Scan</button>
+            </form>
         </div>
+        
     </div>
 </div>
 
