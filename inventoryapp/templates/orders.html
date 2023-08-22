@@ -3,33 +3,44 @@
 {% block title %}Inventory{% endblock %}
 
 {% block content %}
-<!-- Display table Products -->
-{{ table|safe }}
 
-<!-- New product form -->
-<form action="/orders" autocomplete="on" method="POST" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label for="product_name" class="form-label">Product name</label>
-        <input type="text" class="form-control" id="product_name" name="product_name">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            Container Left
+            <!-- New order form -->
+            <form action="/orders" autocomplete="on" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="product_name" class="form-label">Product name</label>
+                    <input type="text" class="form-control" id="product_name" name="product_name">
+                </div>
+
+                <div class="mb-3">
+                    <label for="Quantity" class="form-label">Quantity</label>
+                    <input type="integer" class="form-control" id="Quantity" name="quantity">
+                </div>
+
+                <label for="Vendor" class="form-label">Vendor</label>
+                <div class="input-group mb-3">
+                    <select class="form-select" id="vendor" name="vendor">
+                    <option selected>Choose...</option>
+                    <option value = {{ value[0][0] }} >{{ value[0][1] }}</option>
+                    <option value= {{ value[1][0] }}>{{ value[1][1] }}</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Order</button>
+            </form>
+        </div>
+
+        <div class="col-md-auto">
+            Container Right. Variable width content
+            <!-- Display table Orders -->
+            {{ table|safe }}
+            
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label for="Quantity" class="form-label">Quantity</label>
-        <input type="integer" class="form-control" id="Quantity" name="quantity">
-    </div>
-
-    <label for="Vendor" class="form-label">Vendor</label>
-    <div class="input-group mb-3">
-        <select class="form-select" id="vendor" name="vendor">
-          <option selected>Choose...</option>
-          <option value = {{ value[0][0] }} >{{ value[0][1] }}</option>
-          <option value= {{ value[1][0] }}>{{ value[1][1] }}</option>
-        </select>
-    </div>
-    
-
-
-    <button type="submit" class="btn btn-primary">Order</button>
-</form>
 
 {% endblock %}
