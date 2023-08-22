@@ -115,7 +115,16 @@ def addorder():
             db.session.add(new_order)
             db.session.commit()
 
-    return render_template('orders.html', value = vendors_list)
+    
+    
+    #Select query to display Orders table
+    query = """SELECT * FROM orders"""
+    #Convert sql script result to a dataframe    
+    orders_df = pd.read_sql_query(query, con = db.engine)
+    #Converts dataframe to html table    
+    orders_html = orders_df.to_html(classes = "[table-responsive, table table-dark table-striped]", justify = 'center', index = False)
+
+    return render_template('orders.html', value = vendors_list, table = orders_html)
 
 
 def generate_order_number():
