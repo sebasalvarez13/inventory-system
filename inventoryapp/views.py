@@ -6,7 +6,7 @@ from datetime import datetime
 from sqlalchemy import text
 import random
 import string
-from .deliveries import scan_package
+from .deliveries import scan_package, update_order_status, update_products_stock
 
 #Set up blueprint for Flask application
 views = Blueprint('views', __name__)
@@ -141,30 +141,12 @@ def generate_order_number():
 @views.route('/deliveries', methods = ['GET', 'POST'])
 def delivery():
     if request.method == 'POST':
-        print('scanning package')
-        #scan_package()
-        scan_order_number = 'FV31DRBXW7'
-        #Scan new package. extract info from barcode data
-        new_delivery = Deliveries(
-            vendor_id = 1,
-            date = datetime.now(),
-            employee_id = 13,
-            order_number = scan_order_number
-        )
+        #print('scanning package')
+        scan_order_number = 'UX57FBKXVT'
+        scan_package(scan_order_number)
+        update_order_status(scan_order_number)
+        update_products_stock()
 
-        db.session.add(new_delivery)
-        db.session.commit()
-
-        path = "/mnt/c/users/sa55851/desktop/projects/scripts/inventory-system/inventoryapp/sql/update_order_status.sql"
-        with open(path, 'r') as sql_script:
-            query = sql_script.read()
-        
-        db.session.execute(text(query), {'val1': scan_order_number})
-        db.session.commit()
-        
-        print('order updated')
-
-    
     return redirect(url_for('views.addorder'))
 
 
