@@ -5,7 +5,8 @@ CREATE TABLE deliveries(
     employee_id INT,
     order_number VARCHAR(100),
     PRIMARY KEY(id),
-    FOREIGN KEY (order_number) REFERENCES orders(order_number)
+    FOREIGN KEY (order_number) REFERENCES orders(order_number), 
+    FOREIGN KEY (vvendor_id) REFERENCES vendors(id)
 );
 
 SELECT * FROM deliveries;
