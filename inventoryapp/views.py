@@ -13,7 +13,28 @@ views = Blueprint('views', __name__)
 
 @views.route('/')
 def home():
-    return render_template('home.html')
+    #Select products data
+    query = """SELECT * FROM products"""
+    #Convert sql script result to a dataframe    
+    products_df = pd.read_sql_query(query, con = db.engine)
+    #Converts dataframe to html table    
+    products_html = products_df.to_html(classes = "[table-responsive, table table-dark table-striped]", justify = 'left', index = False)
+
+    #Select products with low stock
+    query = """SELECT name, stock FROM products where stock < 50"""
+    #Convert sql script result to a dataframe    
+    low_stock_products_df = pd.read_sql_query(query, con = db.engine)
+    #Converts dataframe to html table    
+    low_stock_products_html = low_stock_products_df.to_html(classes = "[table-responsive, table table-dark table-striped]", justify = 'left', index = False)
+
+    #Select delivered orders
+    query = """SELECT * FROM orders where status  = 'Delivered' ORDER By date DESC"""
+    #Convert sql script result to a dataframe    
+    delivered_orders_df = pd.read_sql_query(query, con = db.engine)
+    #Converts dataframe to html table    
+    delivered_orders_html = delivered_orders_df.to_html(classes = "[table-responsive, table table-dark table-striped]", justify = 'left', index = False)
+
+    return render_template('home.html', table1 = products_html, table2 = low_stock_products_html, table3 = delivered_orders_html)
 
 
 @views.route('/availableproducts')
