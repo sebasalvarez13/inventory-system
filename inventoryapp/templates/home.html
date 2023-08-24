@@ -2,8 +2,28 @@
 <!-- Give content to the block title -->
 {% block title %}Inventory{% endblock %}
 
+
 {% block content %}
-<!-- Table of B devices(transfer bits) -->
-{{ table|safe }}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Display all products -->
+        {{ table1|safe }}
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <!-- Display low stock products -->
+            Container Left. Low stock
+            {{ table2|safe }}
+        </div>
+
+        <div class="col-md-auto">
+            Container Right. Variable width content. Orders delivered
+            <!-- Display delivered orders -->
+            {{ table3|safe }}
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}
